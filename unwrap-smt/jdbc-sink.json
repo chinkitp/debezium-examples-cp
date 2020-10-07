@@ -8,10 +8,10 @@
         "transforms": "unwrap",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode":"rewrite",
+        "transforms.unwrap.add.fields":"op,source.table,source.ts_ms,source.db",
         "auto.create": "true",
-        "insert.mode": "upsert",
-        "delete.enabled": "true",
-        "pk.fields": "id",
-        "pk.mode": "record_key"
+        "insert.mode": "insert",
+        "pk.mode": "kafka"
     }
 }

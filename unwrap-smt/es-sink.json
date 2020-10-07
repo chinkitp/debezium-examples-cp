@@ -5,12 +5,12 @@
         "tasks.max": "1",
         "topics": "customers",
         "connection.url": "http://elastic:9200",
-        "transforms": "unwrap,key",
+        "transforms": "key",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         "transforms.unwrap.drop.tombstones": "false",
         "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
         "transforms.key.field": "id",
-        "key.ignore": "false",
+        "key.ignore": "true",
         "type.name": "customer",
         "behavior.on.null.values": "delete"
     }
