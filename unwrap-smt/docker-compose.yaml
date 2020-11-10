@@ -22,7 +22,7 @@ services:
      - MYSQL_ROOT_PASSWORD=debezium
      - MYSQL_USER=mysqluser
      - MYSQL_PASSWORD=mysqlpw 
-  postgres:
+  postgres-mirror:
     image: debezium/postgres:9.6
     ports:
      - "5432:5432"
@@ -30,14 +30,22 @@ services:
      - POSTGRES_USER=postgresuser
      - POSTGRES_PASSWORD=postgrespw
      - POSTGRES_DB=inventory
-  elastic:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+  postgres-cdc:
+    image: debezium/postgres:9.6
     ports:
-     - "9200:9200"
+      - "5433:5432"
     environment:
-     - http.host=0.0.0.0
-     - transport.host=127.0.0.1
-     - xpack.security.enabled=false
+      - POSTGRES_USER=postgresuser
+      - POSTGRES_PASSWORD=postgrespw
+      - POSTGRES_DB=inventory
+  # elastic:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:5.5.2
+  #   ports:
+  #    - "9200:9200"
+  #   environment:
+  #    - http.host=0.0.0.0
+  #    - transport.host=127.0.0.1
+  #    - xpack.security.enabled=false
   connect:
     image: debezium/connect-jdbc-es:${DEBEZIUM_VERSION}
     build:
@@ -48,8 +56,9 @@ services:
     links:
      - kafka
      - mysql
-     - postgres
-     - elastic
+     - postgres-cdc
+     - postgres-mirror
+    #  - elastic
     environment:
      - BOOTSTRAP_SERVERS=kafka:9092
      - GROUP_ID=1
